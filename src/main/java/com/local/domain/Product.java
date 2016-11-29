@@ -2,6 +2,14 @@ package com.local.domain;
 
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@XmlRootElement
 public class Product {
 	protected String productId;
 	protected String name;
@@ -13,6 +21,18 @@ public class Product {
 	protected long unitsInOrder;
 	protected boolean discontinued;
 	protected String condition;
+
+	@JsonIgnore
+	protected MultipartFile imageFile;
+
+	@XmlTransient
+	public MultipartFile getImageFile() {
+		return imageFile;
+	}
+
+	public void setImageFile(MultipartFile imageFile) {
+		this.imageFile = imageFile;
+	}
 
 	public Product(String productId, String name, BigDecimal unitPrice) {
 		this.productId = productId;
@@ -111,6 +131,7 @@ public class Product {
 		result = prime * result + ((condition == null) ? 0 : condition.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (discontinued ? 1231 : 1237);
+		result = prime * result + ((imageFile == null) ? 0 : imageFile.hashCode());
 		result = prime * result + ((manufacturer == null) ? 0 : manufacturer.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
@@ -146,6 +167,11 @@ public class Product {
 			return false;
 		if (discontinued != other.discontinued)
 			return false;
+		if (imageFile == null) {
+			if (other.imageFile != null)
+				return false;
+		} else if (!imageFile.equals(other.imageFile))
+			return false;
 		if (manufacturer == null) {
 			if (other.manufacturer != null)
 				return false;
@@ -178,7 +204,7 @@ public class Product {
 		return "Product [productId=" + productId + ", name=" + name + ", unitPrice=" + unitPrice + ", description="
 				+ description + ", manufacturer=" + manufacturer + ", category=" + category + ", unitsInStock="
 				+ unitsInStock + ", unitsInOrder=" + unitsInOrder + ", discontinued=" + discontinued + ", condition="
-				+ condition + "]";
+				+ condition + ", imageFile=" + imageFile + "]";
 	}
 
 }
