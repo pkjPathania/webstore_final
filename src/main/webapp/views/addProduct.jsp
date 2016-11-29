@@ -22,7 +22,8 @@
 		</div>
 	</section>
 	<section class="container">
-		<form:form modelAttribute="newProduct" class="form-horizontal">
+		<form:form modelAttribute="newProduct" class="form-horizontal"
+			enctype="multipart/form-data">
 			<fieldset>
 				<legend>Add new product</legend>
 				<div class="form-group">
@@ -90,6 +91,14 @@
 						<spring:message code="addProduct.form.label.condition.old" />
 						<form:radiobutton path="condition" value="Refurbished" />
 						<spring:message code="addProduct.form.label.condition.refurbished" />
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label col-lg-2" for="imageFile"> <spring:message
+							code="addProduct.form.label.multipart" /></label>
+					<div class="col-lg-10">
+						<form:input id="imageFile" path="imageFile" type="file"
+							class="form:input-large" />
 					</div>
 				</div>
 				<div class="form-group">

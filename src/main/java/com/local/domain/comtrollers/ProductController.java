@@ -1,10 +1,13 @@
 package com.local.domain.comtrollers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.RuntimeBeanNameReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.local.domain.Product;
 import com.local.domain.service.ProductService;
@@ -58,8 +62,19 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addProduct_POST(@ModelAttribute(name = "newProduct") Product product, BindingResult result) {
+	public String addProduct_POST(@ModelAttribute(name = "newProduct") Product product, BindingResult result,
+			HttpServletRequest request) {
 		String[] suppressedFields = result.getSuppressedFields();
+		MultipartFile file = product.getImageFile();
+		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+
+		try {
+			if (file != null && !file.isEmpty()) {
+				file.transferTo(new File(rootDirectory + "resource\\images\\" + product.getProductId() + ".png"));
+			}
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
 		if (suppressedFields.length > 0) {
 			throw new RuntimeException("Attemption to bind disallowed fields");
 		}
